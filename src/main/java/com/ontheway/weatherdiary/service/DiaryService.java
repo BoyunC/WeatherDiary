@@ -3,6 +3,7 @@ package com.ontheway.weatherdiary.service;
 import com.ontheway.weatherdiary.WeatherDiaryApplication;
 import com.ontheway.weatherdiary.domain.DateWeather;
 import com.ontheway.weatherdiary.domain.Diary;
+import com.ontheway.weatherdiary.error.InvalidDate;
 import com.ontheway.weatherdiary.repository.DateWeatherRepository;
 import com.ontheway.weatherdiary.repository.DiaryRepository;
 import java.io.BufferedReader;
@@ -95,6 +96,10 @@ public class DiaryService {
 	@Transactional(readOnly = true)
 	public List<Diary> readDiary(LocalDate date) {
 		logger.debug("read diary");
+
+		if(date.isAfter(LocalDate.ofYearDay(3050, 1))){
+			throw new InvalidDate();
+		}
 		return diaryRepository.findAllByDate(date);
 	}
 
